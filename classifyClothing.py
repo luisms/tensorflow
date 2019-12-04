@@ -8,6 +8,8 @@ from tensorflow import keras
 # Helper libraries
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
+
 
 print(tf.__version__)
 
@@ -41,7 +43,13 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-log_dir="logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+
+data_folder = Path("source_data/text_files/")
+
+
+log_file = data_folder/ datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+
+
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 model.fit(train_images, train_labels, epochs=10,callbacks=[tensorboard_callback])
 
@@ -81,7 +89,7 @@ def plot_value_array(i, predictions_array, true_label):
 
   thisplot[predicted_label].set_color('red')
   thisplot[true_label].set_color('blue')
-"""
+
 num_rows = 5
 num_cols = 3
 num_images = num_rows*num_cols
@@ -94,7 +102,7 @@ for i in range(num_images):
   plot_value_array(i, predictions[i], test_labels)
 plt.tight_layout()
 plt.show()
-"""
+
 
 img = test_images[1]
 img = (np.expand_dims(img,0))
