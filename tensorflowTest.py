@@ -1,6 +1,9 @@
 import tensorflow as tf
 import numpy as np
 import datetime
+
+from pathlib import Path
+
 mnist = tf.keras.datasets.mnist
 
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -25,9 +28,13 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-log_dir="logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-print (log_dir)
-tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+
+data_folder = Path("source_data/text_files/")
+
+
+log_file = data_folder/ datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_file, histogram_freq=1)
 
 print("Train")
 #model.fit(x_train, y_train, epochs=5,callbacks=[tensorboard_callback])

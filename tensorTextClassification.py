@@ -9,6 +9,8 @@ import tensorflow as tf
 
 import tensorflow_hub as hub
 import tensorflow_datasets as tfds
+import datetime
+from pathlib import Path
 
 print("Version: ", tf.__version__)
 print("Eager mode: ", tf.executing_eagerly())
@@ -46,10 +48,22 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 
+
+data_folder = Path("source_data/text_files/")
+
+
+log_file = data_folder/ datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+
+  
+
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_file, histogram_freq=1)
+
+
 history = model.fit(train_data.shuffle(10000).batch(512),
                     epochs=20,
                     validation_data=validation_data.batch(512),
-                    verbose=1)
+                    verbose=1,
+                    callbacks=[tensorboard_callback])
 
 results = model.evaluate(test_data.batch(512), verbose=2)
 
